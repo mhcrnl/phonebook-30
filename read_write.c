@@ -33,6 +33,12 @@ List * initList(){
 //initialize list which is container of whole program
 List *l;
 
+void add(Contact val);
+void delete(int pos);
+void deleteList();
+void showList();
+void writeIntoFile();
+void readIntoList();
 
 // void add(Contact val){
 //     Element *tmp;
@@ -186,16 +192,16 @@ int main() {
     readIntoList();
 
 
-    Contact example;
-    
-    strcpy(example.firstName, "ab");
-    strcpy(example.lastName, "bc");
-    strcpy(example.phoneNumber, "cca");
-    
-    add(example);
+    // Contact example;
+    //
+    // strcpy(example.firstName, "ab");
+    // strcpy(example.lastName, "bc");
+    // strcpy(example.phoneNumber, "cca");
+    //
+    // add(example);
 
 
-    //delete(2);
+    delete(2);
     
     //deleteList();
 
