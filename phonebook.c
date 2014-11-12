@@ -2,37 +2,27 @@
 #include <stdlib.h>
 
 //Global variable
-// int ID = 0;
 int OPTION;
 
-typedef struct contact Contact;
+typedef struct Contact Contact;
+typedef struct Element Element;
+typedef struct List List;
 
-struct contact {
+struct Contact {
   char firstName[20], lastName[20], phoneNumber[20];
 };
 
-void writeIntoFile(Contact information) {
-	
-	// char id[4];
-	// sprintf(id, "%d", ID);
+struct Element {
+    Contact data;
+    Element *tail;
+};
 
-    FILE *file;
-    char *fname;
-    fname = "phonebooks.txt";
-    file = fopen(fname, "a+");
+struct List {
+    Element *head;
+    int size;
+};
 
-	// fputs(id, file);
-	// fputs("|", file);
-    fputs(information.firstName, file);
-	fputs("|", file);
-	fputs(information.lastName, file);
-	fputs("|", file);
-	fputs(information.phoneNumber, file);
-	fputs("|\n", file);
 
-	// ID++;
-    fclose(file);
-}
 
 void menu() {
 	
@@ -60,7 +50,7 @@ void addNewContact() {
 	writeIntoFile(new_contact);
 }
 
-void option(OPTION) {
+void choose(OPTION) {
 
 	switch (OPTION) {
 		case 1: addNewContact(); break;
@@ -77,7 +67,7 @@ int main() {
 	printf("Welcome!!!\n");
 
 	menu();
-	option(OPTION);
+	choose(OPTION);
 
 	printf("\nGood bye!!!\n");
 	return 0;

@@ -1,0 +1,4 @@
+aa|bb|cc|
+ab|bb|cc|
+ab|bc|cc|
+ab|bc|cca|
