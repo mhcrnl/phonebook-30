@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>l
+#include <stdlib.h>
 
 typedef struct Element Element;
 typedef struct List List;
@@ -247,7 +247,7 @@ void readIntoList() {
     fileName = "book.txt";
     file = fopen(fileName, "r");
     char content[1000];
-    char str[50];
+    char str[1000];
 
     while (fgets(content, 1000, file) != NULL) {
     	strcpy(str,content);
@@ -269,7 +269,6 @@ void readIntoList() {
 
     	addToList(new_contact);
     }
-
     fclose(file);
 }
 
