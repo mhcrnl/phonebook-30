@@ -6,9 +6,8 @@ typedef struct Element Element;
 typedef struct List List;
 typedef struct Contact Contact;
 
-struct Contact
-{
-    char firstName[100], lastName[100], phoneNumber[100], sex[100], email[100], address[100];
+struct Contact {
+    char firstName[20], lastName[20], phoneNumber[20], sex[5], email[40], address[100];
 };
 
 struct Element{
@@ -30,14 +29,13 @@ List * initList(){
 }
 
 //Global variable
-int OPTION; //the chosen option
+char OPTION; //the chosen option
 List *l; //initialize list which is container of whole program
 
 //Prototype of all the functions
 
 void addToList(Contact val);
-void deleteFromList(int pos);
-void deleteAllFromList();
+void deleteFromList();
 void writeIntoFile();
 void readIntoList();
 
@@ -46,10 +44,12 @@ void displayByFirstName();
 void displayAllContacts();
 void updateContact();
 void deleteContact();
+void chooseAnotherOption();
+void welcomeBack();
 
 void menu();
 void addNewContact();
-void chooseOption(int OPTION);
+void chooseOption(char OPTION);
 
 
 ///////////////////////////////////////////////
@@ -112,7 +112,23 @@ void addToList(Contact val){
     }
 }
 
-void deleteFromList(int pos){
+void deleteFromList(){
+    int pos = 0;
+    char num[20];
+    Element *tmp;
+    tmp = l->head;
+
+    printf("Input your phone number: ");
+    scanf("%s", num);
+
+    while (tmp != NULL) {
+        if (strcmp(tmp->val.phoneNumber, num) == 0) {
+            break;
+        }
+        tmp = tmp->tail;
+        pos++;
+    }
+
     if (pos == 0) {
     	Element *tmp;
     	tmp = l->head;
@@ -121,26 +137,16 @@ void deleteFromList(int pos){
 	    l->size -= 1;
     }
     else{
-        Element *tmp, *tmp2;
+        Element *tmp1, *tmp2;
         tmp2 = l->head;
         int i;
         for (i=1; i<=pos-1; i++){
             tmp2 = tmp2->tail;
         }
-        tmp = tmp2->tail;
-        tmp2->tail = tmp->tail;
-        free(tmp);
+        tmp1 = tmp2->tail;
+        tmp2->tail = tmp1->tail;
+        free(tmp1);
         l->size -= 1;
-    }
-}
-
-void deleteAllFromList(){
-    while(l->size > 0){
-        Element *tmp;
-    	tmp = l->head;
-	    l->head = l->head->tail;
-	    free(tmp);
-	    l->size -= 1;
     }
 }
 
@@ -279,19 +285,31 @@ void menu() {
 	printf("*\t7. Exit the program\t\t\t\t*\n");
 	printf("\n*********************************************************\n\n");
 	printf("Choose an operation[1-7]: ");
-	scanf("%d", &OPTION);
+	scanf("%s", &OPTION);
 }
 
 void addNewContact() {
 	Contact new_contact;
+    Element *tmp;
+    tmp = l->head;
 
 	printf("\nNew Contact\n");
 	printf("Input your last name: ");
 	scanf("%s", new_contact.lastName);
 	printf("Input your first name: ");
 	scanf("%s", new_contact.firstName);
+	up:
 	printf("Input your phone number: ");
 	scanf("%s", new_contact.phoneNumber);
+    while (tmp != NULL) {
+        if (strcmp(tmp->val.phoneNumber, new_contact.phoneNumber) == 0) {
+            printf("\nThis phone number is already registered.\n");
+            printf("Please make sure you input the new number.\n\n");
+            goto up;
+        }
+        tmp = tmp->tail;
+    }
+
 	printf("Input your gender [M/F]: ");
 	scanf("%s", new_contact.sex);
 	printf("Input your email: ");
@@ -303,28 +321,45 @@ void addNewContact() {
 	addToList(new_contact);
 }
 
-void chooseOption(OPTION) {
+void welcomeBack() {
+    printf("\nWelcome back!!!\n");
+}
+
+void chooseAnotherOption() {
+    printf("\nNo this option\n");
+    printf("Try to choose another option again please\n");
+}
+
+void chooseOption(char OPTION) {
+    char answer;
 	switch (OPTION) {
-		case 1:
+		case '1':
 			addNewContact();
 			break;
-        case 2:
+        case '2':
             displayAllContacts();
             break;
-        case 3:
+        case '3':
             displayByLastName();
 		 	break;
-        case 4:
+        case '4':
             displayByFirstName();
             break;
-		case 7:
-			printf("\nGood bye!!!\n");
-			writeIntoFile();
-			exit(0);
-			break;
+        case '6':
+            deleteFromList();
+            break;
+		case '7':
+		    printf("\nAre you sure you want to exit the program? [y/n] : ");
+		    scanf("%s", &answer);
+		    if (answer == 'y') {
+                printf("\nGood bye!!!\n");
+                writeIntoFile();
+                exit(0);
+		    }
+            welcomeBack();
+            break;
         default:
-			printf("\nNo this option\n");
-			printf("Try to choose another option again please\n");
+			chooseAnotherOption();
 			break;
 	}
 }
