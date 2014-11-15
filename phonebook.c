@@ -113,41 +113,48 @@ void addToList(Contact val){
 }
 
 void deleteFromList(){
-    int pos = 0;
     char num[20];
     Element *tmp;
     tmp = l->head;
 
     printf("Input your phone number: ");
     scanf("%s", num);
-
+	
+	int pos = 0, found = 0;
+	
     while (tmp != NULL) {
         if (strcmp(tmp->val.phoneNumber, num) == 0) {
+			found = 1;
             break;
         }
         tmp = tmp->tail;
         pos++;
     }
+	
+	if (found == 1) {
+	    if (pos == 0) {
+	    	Element *tmp;
+	    	tmp = l->head;
+		    l->head = l->head->tail;
+		    free(tmp);
+		    l->size -= 1;
+	    }
+	    else {
+	        Element *tmp1, *tmp2;
+	        tmp2 = l->head;
+	        int i;
+	        for (i=1; i<=pos-1; i++){
+	            tmp2 = tmp2->tail;
+	        }
+	        tmp1 = tmp2->tail;
+	        tmp2->tail = tmp1->tail;
+	        free(tmp1);
+	        l->size -= 1;
+	    }
+	} else {
+		printf("\nThere is no contact that matched this phone number: '%s'!!!\n", num);
+	}
 
-    if (pos == 0) {
-    	Element *tmp;
-    	tmp = l->head;
-	    l->head = l->head->tail;
-	    free(tmp);
-	    l->size -= 1;
-    }
-    else{
-        Element *tmp1, *tmp2;
-        tmp2 = l->head;
-        int i;
-        for (i=1; i<=pos-1; i++){
-            tmp2 = tmp2->tail;
-        }
-        tmp1 = tmp2->tail;
-        tmp2->tail = tmp1->tail;
-        free(tmp1);
-        l->size -= 1;
-    }
 }
 
 void displayAllContacts(){
@@ -345,7 +352,11 @@ void chooseOption(char OPTION) {
             displayByFirstName();
             break;
         case '6':
-            deleteFromList();
+			if (l->size >= 1) {
+				deleteFromList();
+			} else {
+				printf("\nSorry, there is no contact to delete!!!\n");
+			} 
             break;
 		case '7':
 		    printf("\nAre you sure you want to exit the program? [y/n] : ");
