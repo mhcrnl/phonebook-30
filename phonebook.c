@@ -30,27 +30,21 @@ List * initList(){
 
 //Global variable
 char OPTION; //the chosen option
-List *l; //initialize list which is container of whole program
+List *l; //initialize list which is the container of a whole program
 
 //Prototype of all the functions
 
+void menu();
+void chooseOption(char OPTION);
+void addNewContact();
 void addToList(Contact val);
-void deleteFromList();
-void writeIntoFile();
-void readIntoList();
-
+void displayAllContacts();
 void displayByLastName();
 void displayByFirstName();
-void displayAllContacts();
-void updateContact();
-void deleteContact();
-void chooseAnotherOption();
-void welcomeBack();
-
-void menu();
-void addNewContact();
-void chooseOption(char OPTION);
-
+void updateContactToList();
+void deleteContactFromList();
+void writeIntoFile();
+void readIntoList();
 
 ///////////////////////////////////////////////
 ////////////////Program start//////////////////
@@ -78,6 +72,99 @@ int main() {
 ////////////////Program end////////////////////
 ///////////////////////////////////////////////
 
+void menu() {
+	printf("\n*********************************************************\n\n");
+	printf("*\tPossible Option\t\t\t\t\t*\n");
+	printf("*\t1. Add a new contact\t\t\t\t*\n");
+	printf("*\t2. Display all contacts\t\t\t\t*\n");
+	printf("*\t3. Display contact(s) by last name\t\t*\n");
+	printf("*\t4. Display contact(s) by first name\t\t*\n");
+	printf("*\t5. Update a contact (by using phone number)\t*\n");
+	printf("*\t6. Delete a contact (by using phone number)\t*\n");
+	printf("*\t7. Exit the program\t\t\t\t*\n");
+	printf("\n*********************************************************\n\n");
+	printf("Choose an operation[1-7]: ");
+	scanf("%s", &OPTION);
+}
+
+void chooseOption(char OPTION) {
+    char answer;
+	switch (OPTION) {
+		case '1':
+			addNewContact();
+			break;
+        case '2':
+            displayAllContacts();
+            break;
+        case '3':
+            displayByLastName();
+		 	break;
+        case '4':
+            displayByFirstName();
+            break;
+		case '5':
+			if (l->size >= 1) {
+				updateContactToList();
+			} else {
+				printf("\nSorry, there is no contact to delete!!!\n");
+			}
+			break;
+        case '6':
+			if (l->size >= 1) {
+				deleteContactFromList();
+			} else {
+				printf("\nSorry, there is no contact to delete!!!\n");
+			} 
+            break;
+		case '7':
+			printf("\nAre you sure you want to exit the program? [y/n] : ");
+			scanf("%s", &answer);
+			if (answer == 'y') {
+				printf("\nGood bye!!!\n");
+                writeIntoFile();
+                exit(0);
+		    }
+            printf("\nWelcome back!!!\n");
+            break;
+        default:
+	    	printf("\nNo this option\n");
+	    	printf("Try to choose another option again please\n");
+			break;
+	}
+}
+
+void addNewContact() {
+	Contact new_contact;
+    Element *tmp;
+    tmp = l->head;
+
+	printf("\nNew Contact\n");
+	printf("Input your last name: ");
+	scanf("%s", new_contact.lastName);
+	printf("Input your first name: ");
+	scanf("%s", new_contact.firstName);
+	up:
+	printf("Input your phone number: ");
+	scanf("%s", new_contact.phoneNumber);
+    while (tmp != NULL) {
+        if (strcmp(tmp->val.phoneNumber, new_contact.phoneNumber) == 0) {
+            printf("\nThis phone number is already registered.\n");
+            printf("Please make sure you input the new number.\n\n");
+            goto up;
+        }
+        tmp = tmp->tail;
+    }
+
+	printf("Input your gender [M/F]: ");
+	scanf("%s", new_contact.sex);
+	printf("Input your email: ");
+	scanf("%s", new_contact.email);
+	printf("Input your address: ");
+    fgets(new_contact.address, 100, stdin);
+    fgets(new_contact.address, 100, stdin);
+
+	addToList(new_contact);
+}
 
 void addToList(Contact val){
     if (l->size == 0) {
@@ -110,51 +197,6 @@ void addToList(Contact val){
         queue->tail = tmp;
         l->size += 1;
     }
-}
-
-void deleteFromList(){
-    char num[20];
-    Element *tmp;
-    tmp = l->head;
-
-    printf("Input your phone number: ");
-    scanf("%s", num);
-	
-	int pos = 0, found = 0;
-	
-    while (tmp != NULL) {
-        if (strcmp(tmp->val.phoneNumber, num) == 0) {
-			found = 1;
-            break;
-        }
-        tmp = tmp->tail;
-        pos++;
-    }
-	
-	if (found == 1) {
-	    if (pos == 0) {
-	    	Element *tmp;
-	    	tmp = l->head;
-		    l->head = l->head->tail;
-		    free(tmp);
-		    l->size -= 1;
-	    }
-	    else {
-	        Element *tmp1, *tmp2;
-	        tmp2 = l->head;
-	        int i;
-	        for (i=1; i<=pos-1; i++){
-	            tmp2 = tmp2->tail;
-	        }
-	        tmp1 = tmp2->tail;
-	        tmp2->tail = tmp1->tail;
-	        free(tmp1);
-	        l->size -= 1;
-	    }
-	} else {
-		printf("\nThere is no contact that matched this phone number: '%s'!!!\n", num);
-	}
-
 }
 
 void displayAllContacts(){
@@ -220,6 +262,107 @@ void displayByFirstName() {
     }
 }
 
+void deleteContactFromList(){
+    char num[20];
+    Element *tmp;
+    tmp = l->head;
+
+    printf("Input your phone number: ");
+    scanf("%s", num);
+	
+	int pos = 0, found = 0;
+	
+    while (tmp != NULL) {
+        if (strcmp(tmp->val.phoneNumber, num) == 0) {
+			found = 1;
+            break;
+        }
+        tmp = tmp->tail;
+        pos++;
+    }
+	
+	if (found == 1) {
+	    if (pos == 0) {
+	    	Element *tmp1;
+	    	tmp1 = l->head;
+		    l->head = l->head->tail;
+		    free(tmp1);
+		    l->size -= 1;
+	    }
+	    else {
+	        Element *tmp1, *tmp2;
+	        tmp2 = l->head;
+	        int i;
+	        for (i=1; i<=pos-1; i++){
+	            tmp2 = tmp2->tail;
+	        }
+	        tmp1 = tmp2->tail;
+	        tmp2->tail = tmp1->tail;
+	        free(tmp1);
+	        l->size -= 1;
+	    }
+	} else {
+		printf("\nThere is no contact that matched this phone number: '%s'!!!\n", num);
+	}
+
+}
+
+void updateContactToList() {
+    char num[20];
+    Element *tmp;
+    tmp = l->head;
+
+    printf("Input your phone number: ");
+    scanf("%s", num);
+	
+	int found = 0;
+	
+    while (tmp != NULL) {
+        if (strcmp(tmp->val.phoneNumber, num) == 0) {
+			found = 1;
+            break;
+        }
+        tmp = tmp->tail;
+    }
+	
+	if (found == 1) {
+		Contact up_contact;
+		printf("\nup_Contact\n");
+		printf("Input your last name: ");
+		scanf("%s", up_contact.lastName);
+		printf("Input your first name: ");
+		scanf("%s", up_contact.firstName);
+		up:
+		printf("Input your phone number: ");
+		scanf("%s", up_contact.phoneNumber);
+		Element *tmp1;
+		tmp1 = l->head;
+	    while (tmp1 != NULL) {
+	        if (strcmp(tmp1->val.phoneNumber, up_contact.phoneNumber) == 0) {
+	            printf("\nThis phone number is already registered.\n");
+	            printf("Please make sure you input the new number.\n\n");
+	            goto up;
+	        }
+	        tmp1 = tmp1->tail;
+	    }
+		printf("Input your gender [M/F]: ");
+		scanf("%s", up_contact.sex);
+		printf("Input your email: ");
+		scanf("%s", up_contact.email);
+		printf("Input your address: ");
+	    fgets(up_contact.address, 100, stdin);
+	    fgets(up_contact.address, 100, stdin);
+		strcpy(tmp->val.firstName, up_contact.firstName);
+	    strcpy(tmp->val.lastName, up_contact.lastName);
+	    strcpy(tmp->val.phoneNumber, up_contact.phoneNumber);
+		strcpy(tmp->val.sex, up_contact.sex);
+		strcpy(tmp->val.email, up_contact.email);
+		strcpy(tmp->val.address, up_contact.address);
+	} else {
+		printf("\nThere is no contact that matched this phone number: '%s'!!!\n", num);
+	}
+}
+
 void writeIntoFile() {
 	Element *tmp;
     tmp = l->head;
@@ -278,109 +421,3 @@ void readIntoList() {
     }
     fclose(file);
 }
-
-void menu() {
-	printf("\n*********************************************************\n\n");
-	printf("*\tPossible Option\t\t\t\t\t*\n");
-	printf("*\t1. Add a new contact\t\t\t\t*\n");
-	printf("*\t2. Display all contacts\t\t\t\t*\n");
-	printf("*\t3. Display contact(s) by last name\t\t*\n");
-	printf("*\t4. Display contact(s) by first name\t\t*\n");
-	printf("*\t5. Update a contact (by using phone number)\t*\n");
-	printf("*\t6. Delete a contact (by using phone number)\t*\n");
-	printf("*\t7. Exit the program\t\t\t\t*\n");
-	printf("\n*********************************************************\n\n");
-	printf("Choose an operation[1-7]: ");
-	scanf("%s", &OPTION);
-}
-
-void addNewContact() {
-	Contact new_contact;
-    Element *tmp;
-    tmp = l->head;
-
-	printf("\nNew Contact\n");
-	printf("Input your last name: ");
-	scanf("%s", new_contact.lastName);
-	printf("Input your first name: ");
-	scanf("%s", new_contact.firstName);
-	up:
-	printf("Input your phone number: ");
-	scanf("%s", new_contact.phoneNumber);
-    while (tmp != NULL) {
-        if (strcmp(tmp->val.phoneNumber, new_contact.phoneNumber) == 0) {
-            printf("\nThis phone number is already registered.\n");
-            printf("Please make sure you input the new number.\n\n");
-            goto up;
-        }
-        tmp = tmp->tail;
-    }
-
-	printf("Input your gender [M/F]: ");
-	scanf("%s", new_contact.sex);
-	printf("Input your email: ");
-	scanf("%s", new_contact.email);
-	printf("Input your address: ");
-    fgets(new_contact.address, 100, stdin);
-    fgets(new_contact.address, 100, stdin);
-
-	addToList(new_contact);
-}
-
-void welcomeBack() {
-    printf("\nWelcome back!!!\n");
-}
-
-void chooseAnotherOption() {
-    printf("\nNo this option\n");
-    printf("Try to choose another option again please\n");
-}
-
-void chooseOption(char OPTION) {
-    char answer;
-	switch (OPTION) {
-		case '1':
-			addNewContact();
-			break;
-        case '2':
-            displayAllContacts();
-            break;
-        case '3':
-            displayByLastName();
-		 	break;
-        case '4':
-            displayByFirstName();
-            break;
-        case '6':
-			if (l->size >= 1) {
-				deleteFromList();
-			} else {
-				printf("\nSorry, there is no contact to delete!!!\n");
-			} 
-            break;
-		case '7':
-		    printf("\nAre you sure you want to exit the program? [y/n] : ");
-		    scanf("%s", &answer);
-		    if (answer == 'y') {
-                printf("\nGood bye!!!\n");
-                writeIntoFile();
-                exit(0);
-		    }
-            welcomeBack();
-            break;
-        default:
-			chooseAnotherOption();
-			break;
-	}
-}
-
-
-
-
-
-
-
-
-
-
-
