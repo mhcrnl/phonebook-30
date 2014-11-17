@@ -7,6 +7,7 @@ typedef struct List List;
 typedef struct Contact Contact;
 
 struct Contact {
+    int id;
     char firstName[20], lastName[20], phoneNumber[20], sex[5], email[40], address[100];
 };
 
@@ -114,7 +115,7 @@ void chooseOption(char OPTION) {
 				deleteContactFromList();
 			} else {
 				printf("\nSorry, there is no contact to delete!!!\n");
-			} 
+			}
             break;
 		case '7':
 			printf("\nAre you sure you want to exit the program? [y/n] : ");
@@ -137,6 +138,18 @@ void addNewContact() {
 	Contact new_contact;
     Element *tmp;
     tmp = l->head;
+
+    if (l->size == 0) {
+        new_contact.id = 0;
+    } else {
+        Element *tmp1;
+        tmp1 = l->head;
+        while (tmp1 != NULL) {
+            new_contact.id = tmp1->val.id;
+            tmp1 = tmp1->tail;
+        }
+        new_contact.id++;
+    }
 
 	printf("\nNew Contact\n");
 	printf("Input your last name: ");
@@ -170,6 +183,7 @@ void addToList(Contact val){
     if (l->size == 0) {
 	    Element *tmp;
 	    tmp = (Element*)malloc(sizeof(Element));
+	    tmp->val.id = val.id;
 	    strcpy(tmp->val.firstName, val.firstName);
 	    strcpy(tmp->val.lastName, val.lastName);
 	    strcpy(tmp->val.phoneNumber, val.phoneNumber);
@@ -183,6 +197,7 @@ void addToList(Contact val){
     else{
         Element *tmp, *queue;
         tmp = (Element*)malloc(sizeof(Element));
+        tmp->val.id = val.id;
 	    strcpy(tmp->val.firstName, val.firstName);
 	    strcpy(tmp->val.lastName, val.lastName);
 	    strcpy(tmp->val.phoneNumber, val.phoneNumber);
@@ -205,8 +220,8 @@ void displayAllContacts(){
      int noContact = 1;
 
      while (tmp != NULL){
-        printf("yes display all contacts\n"); //design interface of all contacts
-        //sample interface: printf("[%s, %s, %s] -> \n", tmp->val.firstName, tmp->val.lastName, tmp->val.phoneNumber);
+        //printf("yes display all contacts\n"); design interface of all contacts
+        printf("%d, %s, %s\n", tmp->val.id, tmp->val.firstName, tmp->val.lastName);
         noContact = 0;
         tmp = tmp->tail;
      }
@@ -228,7 +243,7 @@ void displayByLastName() {
 
     while (tmp != NULL) {
         if (strcmp(tmp->val.lastName, lastName) == 0) {
-            printf("yes last contact found\n"); //design interface to display found contact
+            printf("%d, %s, %s\n", tmp->val.id, tmp->val.firstName, tmp->val.lastName);
             notFound = 0;
         }
         tmp = tmp->tail;
@@ -251,7 +266,7 @@ void displayByFirstName() {
 
     while (tmp != NULL) {
         if (strcmp(tmp->val.firstName, firstName) == 0) {
-            printf("yes first contact found\n"); //design interface to display found contact
+            printf("%d, %s, %s\n", tmp->val.id, tmp->val.firstName, tmp->val.lastName);
             notFound = 0;
         }
         tmp = tmp->tail;
@@ -269,9 +284,9 @@ void deleteContactFromList(){
 
     printf("Input your phone number: ");
     scanf("%s", num);
-	
+
 	int pos = 0, found = 0;
-	
+
     while (tmp != NULL) {
         if (strcmp(tmp->val.phoneNumber, num) == 0) {
 			found = 1;
@@ -280,7 +295,7 @@ void deleteContactFromList(){
         tmp = tmp->tail;
         pos++;
     }
-	
+
 	if (found == 1) {
 	    if (pos == 0) {
 	    	Element *tmp1;
@@ -314,9 +329,9 @@ void updateContactToList() {
 
     printf("Input your phone number: ");
     scanf("%s", num);
-	
+
 	int found = 0;
-	
+
     while (tmp != NULL) {
         if (strcmp(tmp->val.phoneNumber, num) == 0) {
 			found = 1;
@@ -324,7 +339,7 @@ void updateContactToList() {
         }
         tmp = tmp->tail;
     }
-	
+
 	if (found == 1) {
 		Contact up_contact;
 		printf("\nup_Contact\n");
@@ -338,7 +353,7 @@ void updateContactToList() {
 		Element *tmp1;
 		tmp1 = l->head;
 	    while (tmp1 != NULL) {
-	        if (strcmp(tmp1->val.phoneNumber, up_contact.phoneNumber) == 0) {
+	        if (strcmp(tmp1->val.phoneNumber, up_contact.phoneNumber) == 0 && strcmp(tmp1->val.phoneNumber, num) != 0) {
 	            printf("\nThis phone number is already registered.\n");
 	            printf("Please make sure you input the new number.\n\n");
 	            goto up;
@@ -368,11 +383,14 @@ void writeIntoFile() {
     tmp = l->head;
 
     FILE *file;
-    char *fileName;
+    char *fileName, id[5];
     fileName = "book.txt";
     file = fopen(fileName, "w+");
 
     while (tmp != NULL){
+        sprintf(id, "%d", tmp->val.id);
+        fputs(id, file);
+        fputs("|", file);
         fputs(tmp->val.firstName, file);
     	fputs("|", file);
     	fputs(tmp->val.lastName, file);
@@ -402,7 +420,7 @@ void readIntoList() {
     while (fgets(content, 1000, file) != NULL) {
     	strcpy(str,content);
 	  	char * pch;
-  		char splitted_string[6][100];
+  		char splitted_string[7][100];
   		pch = strtok (str,"|");
   		int index = 0;
   		while (pch != NULL) {
@@ -410,14 +428,19 @@ void readIntoList() {
     		pch = strtok(NULL, "|");
     		index++;
   		}
-    	strcpy(new_contact.firstName, splitted_string[0]);
-    	strcpy(new_contact.lastName, splitted_string[1]);
-    	strcpy(new_contact.phoneNumber, splitted_string[2]);
-		strcpy(new_contact.sex, splitted_string[3]);
-		strcpy(new_contact.email, splitted_string[4]);
-		strcpy(new_contact.address, splitted_string[5]);
+  		new_contact.id = atoi(splitted_string[0]);
+    	strcpy(new_contact.firstName, splitted_string[01]);
+    	strcpy(new_contact.lastName, splitted_string[2]);
+    	strcpy(new_contact.phoneNumber, splitted_string[3]);
+		strcpy(new_contact.sex, splitted_string[4]);
+		strcpy(new_contact.email, splitted_string[5]);
+		strcpy(new_contact.address, splitted_string[6]);
 
-    	addToList(new_contact);
-    }
-    fclose(file);
+
+		addToList(new_contact);
+
+	}
+
+	fclose(file);
+
 }
