@@ -175,8 +175,13 @@ void addNewContact() {
         }
         tmp = tmp->tail;
     }
+	again:
     printf("  Input your gender [M/F]: ");
     scanf("%s", new_contact.sex);
+	if (strcmp(new_contact.sex, "M") != 0 && strcmp(new_contact.sex, "F") != 0 && strcmp(new_contact.sex, "m") != 0 && strcmp(new_contact.sex, "f") != 0) {
+		printf("Your sex is invalid!!!\n");
+		goto again;
+	}
     printf("  Input your email: ");
     scanf("%s", new_contact.email);
     printf("  Input your address: ");
