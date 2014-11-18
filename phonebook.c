@@ -265,7 +265,7 @@ void displayByLastName() {
     system("cls");
     printf("Display Contacts by Last Name\n");
     while (tmp != NULL) {
-        if (strcmp(tmp->val.lastName, lastName) == 0) {
+        if (strcmpi(tmp->val.lastName, lastName) == 0) {
             printf("\n\tID: %d\t\t\tName: %s %s\n", tmp->val.id, tmp->val.lastName, tmp->val.firstName);
             printf("\tSex: %s\t\t\tPhone Number: %s\n", tmp->val.sex, tmp->val.phoneNumber);
             printf("\tEmail: %s\n", tmp->val.email);
@@ -297,7 +297,7 @@ void displayByFirstName() {
     system("cls");
     printf("Display Contacts by First Name:\n");
     while (tmp != NULL) {
-        if (strcmp(tmp->val.firstName, firstName) == 0) {
+        if (strcmpi(tmp->val.firstName, firstName) == 0) {
             printf("\n\tID: %d\t\t\tName: %s %s\n", tmp->val.id, tmp->val.lastName, tmp->val.firstName);
             printf("\tSex: %s\t\t\tPhone Number: %s\n", tmp->val.sex, tmp->val.phoneNumber);
             printf("\tEmail: %s\n", tmp->val.email);
@@ -337,7 +337,8 @@ void updateContactToList() {
 
     if (found == 1) {
         Contact up_contact;
-        printf("\nRecent contact information:\n");
+        system("cls");
+        printf("Recent contact information:\n");
         printf("\tID: %d\t\t\tName: %s %s\n", tmp->val.id, tmp->val.lastName, tmp->val.firstName);
         printf("\tSex: %s\t\t\tPhone Number: %s\n", tmp->val.sex, tmp->val.phoneNumber);
         printf("\tEmail: %s\n", tmp->val.email);
