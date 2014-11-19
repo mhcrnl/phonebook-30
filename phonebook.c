@@ -47,6 +47,7 @@ void updateContactToList();
 void deleteContactFromList();
 void writeIntoFile();
 void readIntoList();
+void recentContact();
 
 ///////////////////////////////////////////////
 ////////////////Program start//////////////////
@@ -55,7 +56,7 @@ void readIntoList();
 int main() {
     FILE *file;
     char *fileName;
-    fileName = "book.txt";
+    fileName = "phonebookData.txt";
     file = fopen(fileName, "a");
     l = initList();
     readIntoList();
@@ -90,7 +91,7 @@ void menu() {
     printf("*\t\t\t\t\t\t\t*\n");
     printf("*********************************************************\n\n");
     printf("Choose an operation[1-7]: ");
-    scanf("%s", &OPTION);
+    OPTION = getch();
 }
 
 void chooseOption(char OPTION) {
@@ -134,9 +135,9 @@ void chooseOption(char OPTION) {
             printf("Welcome back!!!\n");
             break;
         default:
-			system("cls");
+            system("cls");
             printf("Option not found!!!\n");
-            printf("Please try to choose another option.\n");
+            printf("Please try to choose another option\n\n");
             break;
     }
 }
@@ -157,8 +158,8 @@ void addNewContact() {
         }
         new_contact.id++;
     }
-
-    printf("\nNew Contact\n\n");
+    system("cls");
+    printf("New Contact\n\n");
     printf("Please:\n");
     printf("  Input your last name: ");
     scanf("%s", new_contact.lastName);
@@ -169,26 +170,26 @@ void addNewContact() {
     scanf("%s", new_contact.phoneNumber);
     while (tmp != NULL) {
         if (strcmp(tmp->val.phoneNumber, new_contact.phoneNumber) == 0) {
-            printf("\n\nThis phone number is already registered.\n");
-            printf("Please make sure you input the new number.\n\n");
+            printf("\n\n  This phone number is already registered.\n");
+            printf("  Please make sure you input the new number.\n\n");
             goto up;
         }
         tmp = tmp->tail;
     }
-	again:
+    again:
     printf("  Input your gender [M/F]: ");
     scanf("%s", new_contact.sex);
-	if (strcmp(new_contact.sex, "M") != 0 && strcmp(new_contact.sex, "F") != 0 && strcmp(new_contact.sex, "m") != 0 && strcmp(new_contact.sex, "f") != 0) {
-		printf("Invalid! Please input [M/F].\n");
-		goto again;
-	}
+    if (strcmp(new_contact.sex, "M") != 0 && strcmp(new_contact.sex, "F") != 0 && strcmp(new_contact.sex, "m") != 0 && strcmp(new_contact.sex, "f") != 0) {
+        printf("\n  Invalid! Please input M/F\n\n");
+        goto again;
+    }
     printf("  Input your email: ");
     scanf("%s", new_contact.email);
     printf("  Input your address: ");
     fgets(new_contact.address, 100, stdin);
     fgets(new_contact.address, 100, stdin);
-    printf("\nYour contact is temporary saved.\nPress Enter to return back to menu.\n");
-    getchar();
+    printf("\nYour contact is temporary saved.\nPress any key to return back to menu.\n");
+    getch();
     system("cls");
     addToList(new_contact);
 }
@@ -247,9 +248,8 @@ void displayAllContacts(){
         system("cls");
         printf("Sorry, your phone book is empty!!!\n");
     }
-    printf("\nPress Enter to return back to menu.\n");
-    getchar();
-    getchar();
+    printf("\nPress any key to return back to menu.\n");
+    getch();
     system("cls");
 }
 
@@ -257,8 +257,9 @@ void displayByLastName() {
     Element *tmp;
     char lastName[20];
     int notFound = 1;
-
-    printf("\nInput the last name: ");
+    system("cls");
+    printf("Search Contact by last name\n\n");
+    printf("Input the last name: ");
     scanf("%s", lastName);
 
     tmp = l->head;
@@ -279,9 +280,8 @@ void displayByLastName() {
         system("cls");
         printf("Sorry, no contact found!!!\n");
     }
-    printf("\nPress Enter to return back to menu.\n");
-    getchar();
-    getchar();
+    printf("\nPress any key to return back to menu.\n");
+    getch();
     system("cls");
 }
 
@@ -289,8 +289,9 @@ void displayByFirstName() {
     Element *tmp;
     char firstName[20];
     int notFound = 1;
-
-    printf("\nInput the first name: ");
+    system("cls");
+    printf("Search Contact by first name\n\n");
+    printf("Input the first name: ");
     scanf("%s", firstName);
 
     tmp = l->head;
@@ -311,18 +312,20 @@ void displayByFirstName() {
         system("cls");
         printf("Sorry, no contact found!!!\n");
     }
-    printf("\nPress Enter to return back to menu.\n");
-    getchar();
-    getchar();
+    printf("\nPress any key to return back to menu.\n");
+    getch();
     system("cls");
 }
 
 void updateContactToList() {
+    recentContact();
+
     char num[20], answer;
     Element *tmp;
     tmp = l->head;
-
-    printf("\nInput your phone number: ");
+    system("cls");
+    printf("Update Contact by phone number\n\n");
+    printf("Input contact phone number that you wish to update: ");
     scanf("%s", num);
 
     int found = 0;
@@ -361,13 +364,13 @@ void updateContactToList() {
             }
             tmp1 = tmp1->tail;
         }
-		again:
-	    printf("  Input your gender [M/F]: ");
-	    scanf("%s", up_contact.sex);
-		if (strcmp(up_contact.sex, "M") != 0 && strcmp(up_contact.sex, "F") != 0 && strcmp(up_contact.sex, "m") != 0 && strcmp(up_contact.sex, "f") != 0) {
-			printf("Invalid! Please input [M/F].\n");
-			goto again;
-		}
+        again:
+        printf("  Input your gender [M/F]: ");
+        scanf("%s", up_contact.sex);
+        if (strcmp(up_contact.sex, "M") != 0 && strcmp(up_contact.sex, "F") != 0 && strcmp(up_contact.sex, "m") != 0 && strcmp(up_contact.sex, "f") != 0) {
+            printf("\n  Invalid! Please input M/F\n\n");
+            goto again;
+        }
         printf("  Input your email: ");
         scanf("%s", up_contact.email);
         printf("  Input your address: ");
@@ -391,18 +394,19 @@ void updateContactToList() {
     } else {
         printf("\nThere is no contact that matched this phone number: '%s'!!!\n", num);
     }
-    printf("\nPress Enter to return back to menu.\n");
-    getchar();
-    getchar();
+    printf("\nPress any key to return back to menu.\n");
+    getch();
     system("cls");
 }
 
 void deleteContactFromList(){
+    recentContact();
     char num[20], answer;
     Element *tmp;
     tmp = l->head;
-
-    printf("\nInput your phone number: ");
+    system("cls");
+    printf("Delete Contact by phone number\n\n");
+    printf("Input contact phone number that you wish to delete: ");
     scanf("%s", num);
 
     int pos = 0, found = 0;
@@ -447,9 +451,8 @@ void deleteContactFromList(){
     } else {
         printf("\nThere is no contact that matched this phone number: '%s'!!!\n", num);
     }
-    printf("\nPress Enter to return back to menu.\n");
-    getchar();
-    getchar();
+    printf("\nPress any key to return back to menu.\n");
+    getch();
     system("cls");
 }
 
@@ -459,7 +462,7 @@ void writeIntoFile() {
 
     FILE *file;
     char *fileName, id[5];
-    fileName = "book.txt";
+    fileName = "phonebookData.txt";
     file = fopen(fileName, "w+");
 
     while (tmp != NULL){
@@ -483,25 +486,25 @@ void writeIntoFile() {
 }
 
 void readIntoList() {
-	Contact new_contact;
-	FILE *file;
-	char *fileName;
-	fileName = "book.txt";
-	file = fopen(fileName, "r");
-	char content[1000];
-	char str[1000];
+    Contact new_contact;
+    FILE *file;
+    char *fileName;
+    fileName = "phonebookData.txt";
+    file = fopen(fileName, "r");
+    char content[1000];
+    char str[1000];
 
     while (fgets(content, 1000, file) != NULL) {
         strcpy(str,content);
-		char * pch;
-		char splitted_string[7][100];
-		pch = strtok (str,"|");
-		int index = 0;
-		while (pch != NULL) {
-			strcpy(splitted_string[index],pch);
-			pch = strtok(NULL, "|");
-			index++;
-		}
+        char * pch;
+        char splitted_string[7][100];
+        pch = strtok (str,"|");
+        int index = 0;
+        while (pch != NULL) {
+            strcpy(splitted_string[index],pch);
+            pch = strtok(NULL, "|");
+            index++;
+        }
         new_contact.id = atoi(splitted_string[0]);
         strcpy(new_contact.firstName, splitted_string[01]);
         strcpy(new_contact.lastName, splitted_string[2]);
@@ -512,4 +515,20 @@ void readIntoList() {
         addToList(new_contact);
     }
     fclose(file);
+}
+
+void recentContact(){
+    Element *tmp;
+    tmp = l->head;
+    int noContact = 1;
+    system("cls");
+    printf("Recent Contacts\n");
+    while (tmp != NULL){
+        printf("\n\tID: %d\t\t\tName: %s %s\n", tmp->val.id, tmp->val.lastName, tmp->val.firstName);
+        printf("\tSex: %s\t\t\tPhone Number: %s\n", tmp->val.sex, tmp->val.phoneNumber);
+        printf("\tEmail: %s\n", tmp->val.email);
+        printf("\tAddress: %s\n", tmp->val.address);
+        noContact = 0;
+        tmp = tmp->tail;
+    }
 }
