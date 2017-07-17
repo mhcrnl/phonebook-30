@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <conio.h>
+//#include <conio.h>
 
 typedef struct Element Element;
 typedef struct List List;
@@ -91,7 +91,7 @@ void menu() {
     printf("*\t\t\t\t\t\t\t*\n");
     printf("*********************************************************\n\n");
     printf("Choose an operation[1-7]: ");
-    OPTION = getch();
+    //OPTION = getch();
 }
 
 void chooseOption(char OPTION) {
@@ -189,7 +189,7 @@ void addNewContact() {
     fgets(new_contact.address, 100, stdin);
     fgets(new_contact.address, 100, stdin);
     printf("\nYour contact is temporary saved.\nPress any key to return back to menu.\n");
-    getch();
+    //getch();
     system("cls");
     addToList(new_contact);
 }
@@ -249,7 +249,7 @@ void displayAllContacts(){
         printf("Sorry, your phone book is empty!!!\n");
     }
     printf("\nPress any key to return back to menu.\n");
-    getch();
+//     getch();
     system("cls");
 }
 
@@ -281,7 +281,7 @@ void displayByLastName() {
         printf("Sorry, no contact found!!!\n");
     }
     printf("\nPress any key to return back to menu.\n");
-    getch();
+    //getch();
     system("cls");
 }
 
@@ -313,7 +313,7 @@ void displayByFirstName() {
         printf("Sorry, no contact found!!!\n");
     }
     printf("\nPress any key to return back to menu.\n");
-    getch();
+    //getch();
     system("cls");
 }
 
