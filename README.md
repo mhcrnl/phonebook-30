@@ -5,11 +5,11 @@ Agenda telefonica implementata in limbajul de programare C.
 ```
 git clone https://github.com/mhcrnl/phonebook-30.git
 cd phonebook-30
-gcc phonebook.c
 ```
 
 ## Utilizare
 ```
+make
 ./phonebook
 ```
 

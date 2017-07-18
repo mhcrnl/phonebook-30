@@ -131,11 +131,11 @@ void chooseOption(char OPTION) {
                 writeIntoFile();
                 exit(0);
             }
-            system("cls");
+            //system("tput clear");
             printf("Welcome back!!!\n");
             break;
         default:
-            system("cls");
+            //system("tput clear");
             printf("Option not found!!!\n");
             printf("Please try to choose another option\n\n");
             break;
@@ -158,7 +158,7 @@ void addNewContact() {
         }
         new_contact.id++;
     }
-    system("cls");
+    //system("tput clear");
     printf("New Contact\n\n");
     printf("Please:\n");
     printf("  Input your last name: ");
@@ -190,7 +190,7 @@ void addNewContact() {
     fgets(new_contact.address, 100, stdin);
     printf("\nYour contact is temporary saved.\nPress any key to return back to menu.\n");
     //getch();
-    system("cls");
+    //system("tput clear");
     addToList(new_contact);
 }
 
@@ -233,7 +233,7 @@ void displayAllContacts(){
     Element *tmp;
     tmp = l->head;
     int noContact = 1;
-    system("cls");
+    //system("tput clear");
     printf("Display All Contacts\n");
     while (tmp != NULL){
         printf("\n\tID: %d\t\t\tName: %s %s\n", tmp->val.id, tmp->val.lastName, tmp->val.firstName);
@@ -245,28 +245,28 @@ void displayAllContacts(){
     }
 
     if (noContact) {
-        system("cls");
+        //system("tput clear");
         printf("Sorry, your phone book is empty!!!\n");
     }
     printf("\nPress any key to return back to menu.\n");
 //     getch();
-    system("cls");
+    //system("tput clear");
 }
 
 void displayByLastName() {
     Element *tmp;
     char lastName[20];
     int notFound = 1;
-    system("cls");
+    //system("tput clear");
     printf("Search Contact by last name\n\n");
     printf("Input the last name: ");
     scanf("%s", lastName);
 
     tmp = l->head;
-    system("cls");
+    //system("tput clear");
     printf("Display Contacts by Last Name\n");
     while (tmp != NULL) {
-        if (strcmpi(tmp->val.lastName, lastName) == 0) {
+        if (strcmp(tmp->val.lastName, lastName) == 0) {
             printf("\n\tID: %d\t\t\tName: %s %s\n", tmp->val.id, tmp->val.lastName, tmp->val.firstName);
             printf("\tSex: %s\t\t\tPhone Number: %s\n", tmp->val.sex, tmp->val.phoneNumber);
             printf("\tEmail: %s\n", tmp->val.email);
@@ -277,28 +277,28 @@ void displayByLastName() {
     }
 
     if (notFound) {
-        system("cls");
+        //system("tput clear");
         printf("Sorry, no contact found!!!\n");
     }
     printf("\nPress any key to return back to menu.\n");
     //getch();
-    system("cls");
+    //system("tput clear");
 }
 
 void displayByFirstName() {
     Element *tmp;
     char firstName[20];
     int notFound = 1;
-    system("cls");
+    //system("tput clear");
     printf("Search Contact by first name\n\n");
     printf("Input the first name: ");
     scanf("%s", firstName);
 
     tmp = l->head;
-    system("cls");
+    //system("tput clear");
     printf("Display Contacts by First Name:\n");
     while (tmp != NULL) {
-        if (strcmpi(tmp->val.firstName, firstName) == 0) {
+        if (strcmp(tmp->val.firstName, firstName) == 0) {
             printf("\n\tID: %d\t\t\tName: %s %s\n", tmp->val.id, tmp->val.lastName, tmp->val.firstName);
             printf("\tSex: %s\t\t\tPhone Number: %s\n", tmp->val.sex, tmp->val.phoneNumber);
             printf("\tEmail: %s\n", tmp->val.email);
@@ -309,12 +309,12 @@ void displayByFirstName() {
     }
 
     if (notFound) {
-        system("cls");
+        //system("tput clear");
         printf("Sorry, no contact found!!!\n");
     }
     printf("\nPress any key to return back to menu.\n");
     //getch();
-    system("cls");
+    //system("tput clear");
 }
 
 void updateContactToList() {
@@ -323,7 +323,7 @@ void updateContactToList() {
     char num[20], answer;
     Element *tmp;
     tmp = l->head;
-    system("cls");
+    //system("tput clear");
     printf("Update Contact by phone number\n\n");
     printf("Input contact phone number that you wish to update: ");
     scanf("%s", num);
@@ -340,7 +340,7 @@ void updateContactToList() {
 
     if (found == 1) {
         Contact up_contact;
-        system("cls");
+        //system("tput clear");
         printf("Recent contact information:\n");
         printf("\tID: %d\t\t\tName: %s %s\n", tmp->val.id, tmp->val.lastName, tmp->val.firstName);
         printf("\tSex: %s\t\t\tPhone Number: %s\n", tmp->val.sex, tmp->val.phoneNumber);
@@ -395,8 +395,8 @@ void updateContactToList() {
         printf("\nThere is no contact that matched this phone number: '%s'!!!\n", num);
     }
     printf("\nPress any key to return back to menu.\n");
-    getch();
-    system("cls");
+    //getch();
+    //system("tput clear");
 }
 
 void deleteContactFromList(){
@@ -404,7 +404,7 @@ void deleteContactFromList(){
     char num[20], answer;
     Element *tmp;
     tmp = l->head;
-    system("cls");
+    //system("tput clear");
     printf("Delete Contact by phone number\n\n");
     printf("Input contact phone number that you wish to delete: ");
     scanf("%s", num);
@@ -452,8 +452,8 @@ void deleteContactFromList(){
         printf("\nThere is no contact that matched this phone number: '%s'!!!\n", num);
     }
     printf("\nPress any key to return back to menu.\n");
-    getch();
-    system("cls");
+    //getch();
+    //system("tput clear");
 }
 
 void writeIntoFile() {
@@ -521,7 +521,7 @@ void recentContact(){
     Element *tmp;
     tmp = l->head;
     int noContact = 1;
-    system("cls");
+    //system("tput clear");
     printf("Recent Contacts\n");
     while (tmp != NULL){
         printf("\n\tID: %d\t\t\tName: %s %s\n", tmp->val.id, tmp->val.lastName, tmp->val.firstName);
