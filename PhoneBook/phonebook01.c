@@ -44,7 +44,7 @@ int runProgram(char OPTION){
             exit(0);
             break;
         case '0':
-            system("./gitpush");
+            system("./gitpush.sh");
         default:
             printf("Alegerea dvs. nu este in meniu.");
             break;
